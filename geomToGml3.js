@@ -20,23 +20,25 @@ var converter = {
     '_multi': function(name, memberName, geom, gmlId, srsName, srsDimension=''){
 	let multi = `<gml:${name}${attrs({srsName, 'gml:id':gmlId})}>`;
 	for (let member of geom){
-	    if (member.type){
-		// geometryCollection: memberPrefix should be '',
-		var memberType = member.type;
+	    var memberType;
+	    if (name == 'MultiGeometry'){
+		memberType = member.type;
 		member = member.coordinates;
+	    } else {
+		 memberType = {'MultiPoint':'Point',
+			       'MultiCurve':'LineString',
+			       'MultiSurface':'Polygon'}[name];
 	    }
-	    if (!memberType){
-		throw new Error('un-typed member ' + JSON.stringify(member));
-	    }
+	    if (!this[memberType]){throw new Error(`memberType:${memberType}`);}
 	    multi += `<gml:${memberName}>` +
-		        converter[memberType](member, srsName='') +
+		        this[memberType](member, srsName='') +
 		     `</gml:${memberName}>`;
 	}
 	multi += `</gml:${name}>`;
 	return multi;
     },
     'Point': function(coords, gmlId, srsName, srsDimension){
-	return `<gml:Point${attrs({srsName, 'gml:id': gmlId})}>` +
+	return `<gml:Point${attrs({srsName:srsName, 'gml:id': gmlId})}>` +
 	         `<gml:pos${attrs({srsDimension})}>` +
 	               coords.join() +
 	          '</gml:pos>' +
@@ -91,7 +93,15 @@ var converter = {
     }
 };
 
-function geomToGml(geom, srsName='http://www.opengis.net/def/crs/EPSG/0/4326'){
-    return converter[geom.type](geom.coordinates || geom.geometries, srsName); 
+function geomToGml(geom,
+		   gmlId,
+		   srsName='http://www.opengis.net/def/crs/EPSG/0/4326',
+		   srsDimension){
+    return converter[geom.type](
+	geom.coordinates || geom.geometries,
+	gmlId,
+	srsName,
+	srsDimension
+    ); 
 }
 exports.geomToGml = geomToGml;
