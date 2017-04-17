@@ -1,4 +1,4 @@
-/* DISCLAIMER: the below is a hack, and may not comply with OGC GML > 2.
+/* DISCLAIMER: gml 2.1.2-compliant only
 This hack only supports GML simple features.
 GML models from https://docs.oracle.com/cd/E11882_01/appdev.112/e11829/oracle/spatial/util/GML.html
 
@@ -33,7 +33,6 @@ var converter = {
     },
     'Polygon': function(coords, srsName){
 	// geom.coordinates are arrays of LinearRings
-	console.log('!;');
 	let polygon = `<gml:Polygon${(srsName ? ` srsName="${srsName}"`:'')}>` +
 		     '<gml:OuterBoundaryIs>' +
 		        this.LinearRing(coords[0]) +
