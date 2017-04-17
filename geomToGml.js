@@ -48,7 +48,6 @@ var converter = {
 	return polygon;
     },
     '_multi': function(geom, name, srsName, memberPrefix=''){
-	console.log(geom);
 	let multi = `<gml:${name}${(srsName ? ` srsName="${srsName}"` : '')}>`;
 	for (let member of geom){
 	    var _memberPrefix = '';
