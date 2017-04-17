@@ -34,14 +34,14 @@ var converter = {
     'Polygon': function(coords, srsName){
 	// geom.coordinates are arrays of LinearRings
 	let polygon = `<gml:Polygon${(srsName ? ` srsName="${srsName}"`:'')}>` +
-		     '<gml:OuterBoundaryIs>' +
+		     '<gml:outerBoundaryIs>' +
 		        this.LinearRing(coords[0]) +
-	             '</gml:OuterBoundaryIs>';
+	             '</gml:outerBoundaryIs>';
 	if (coords.length >= 2){
 	    for (let linearRing of coords.slice(1)){
-		polygon += '<gml:InnerBoundaryIs>' +
+		polygon += '<gml:innerBoundaryIs>' +
 		             this.LinearRing(linearRing) + 
-		           '</gml:InnerBoundaryIs>';
+		           '</gml:innerBoundaryIs>';
 	    }
 	}
 	polygon += '</gml:Polygon>';
@@ -69,7 +69,7 @@ var converter = {
 	return multi;
     },
     'MultiPoint': function(coords, srsName){
-	return this._multi(coords, 'Point', srsName, 'point');
+	return this._multi(coords, 'MultiPoint', srsName, 'point');
     },
     'MultiLineString': function(coords, srsName){
 	return this._multi(coords, 'MultiLineString', srsName, 'lineString');
@@ -78,7 +78,7 @@ var converter = {
 	return this._multi(coords, 'MultiPolygon', srsName, 'polygon');
     },
     'GeometryCollection': function(geoms, srsName){
-	return this._multi(geoms, 'GeometryCollection', srsName);
+	return this._multi(geoms, 'MultiGeometry', srsName, 'geometry');
     }
 };
 // TODO: gml v3.x.x converter
