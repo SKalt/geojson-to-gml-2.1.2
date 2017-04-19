@@ -19,14 +19,14 @@ var converter = {
     },
     'LineString': function(coords, srsName){
 	return `<gml:LineString${(srsName ? ` srsName="${srsName}"`:'')}>` +
-	          '<gml:coordinates>' +
+	          '<gml:coordinates cs="," ts=" " decimal=".">' +
 	              coords.join(' ') +
 	          '</gml:coordinates>' +
 	       '</gml:LineString>';
     },
     'LinearRing': function(coords, srsName){
 	return `<gml:LinearRing${(srsName ? ` srsName="${srsName}"`:'')}>` +
-	          '<gml:coordinates>' +
+	          '<gml:coordinates cs="," ts=" " decimal=".">' +
 	            coords.join(' ') + 
 	          '</gml:coordinates>' +
 	       '</gml:LinearRing>';
@@ -81,12 +81,8 @@ var converter = {
 	return this._multi(geoms, 'MultiGeometry', srsName, 'geometry');
     }
 };
-// TODO: gml v3.x.x converter
-// TODO: setup tests with PostGIS point, lineString, polygon, & multi-*.
 function geomToGml(geom, srsName='EPSG:4326'){
-    // TODO: switch between gml versions
     return converter[geom.type](geom.coordinates || geom.geometries, srsName);
- 
 }
 
 exports.geomToGml = geomToGml;
