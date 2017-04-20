@@ -17,6 +17,19 @@ const capital = (str) => str.replace(/^./, (letter) => letter.toUpperCase());
 const lower = (str) => str.replace(/^./, (letter) => letter.toLowerCase());
 
 var converter = {
+    /**
+     * A handler to compile geometries to multigeometries
+     * @param {string} name the name of the target multigeometry
+     * @param {string} memberName the gml:tag of each multigeometry member.
+     * @param {Object[]|Array} geom an array of geojson geometries
+     * @param {string|number} gmlId the gml:id of the multigeometry
+     * @param {Object} params optional parameters. Omit gmlIds at your own risk, however.
+     * @param {string|undefined} params.srsName as string specifying SRS
+     * @param {number[]|string[]} params.gmlIds an array of number/string gml:ids of the member geometries.
+     * @param {number|string|undefined} params.srsDimension the dimensionality of each coordinate, i.e. 2 or 3.
+     * @returns {string} a string containing gml describing the input multigeometry
+     * @throws {Error} if a member geometry cannot be converted to gml
+     */
     '_multi': function(name, memberName, geom, gmlId, params={}){
 	var {srsName:srsName, srsDimension:srsDimension, gmlIds:gmlIds} = params;
 	let multi = `<gml:${name}${attrs({srsName, 'gml:id':gmlId})}>`;
@@ -41,6 +54,15 @@ var converter = {
 	multi += `</gml:${name}>`;
 	return multi;
     },
+    /**
+     * Converts an input geojson Point geometry to gml
+     * @param {number[]} coords the coordinates member of the geojson geometry
+     * @param {string|number} gmlId the gml:id
+     * @param {Object} params optional parameters
+     * @param {string|undefined} params.srsName as string specifying SRS
+     * @param {number|string|undefined} params.srsDimension the dimensionality of each coordinate, i.e. 2 or 3.
+     * @returns {string} a string containing gml representing the input geometry
+     */
     'Point': function(coords, gmlId, params={}){
 	var {srsName:srsName, srsDimension:srsDimension} = params;
 	return `<gml:Point${attrs({srsName:srsName, 'gml:id': gmlId})}>` +
@@ -49,6 +71,15 @@ var converter = {
 	          '</gml:pos>' +
 	        '</gml:Point>';
     },
+     /**
+     * Converts an input geojson LineString geometry to gml
+     * @param {number[][]} coords the coordinates member of the geojson geometry
+     * @param {string|number} gmlId the gml:id
+     * @param {Object} params optional parameters
+     * @param {string|undefined} params.srsName as string specifying SRS
+     * @param {number|string|undefined} params.srsDimension the dimensionality of each coordinate, i.e. 2 or 3.
+     * @returns {string} a string containing gml representing the input geometry
+     */
     'LineString': function(coords, gmlId, params={}){
 	var {srsName:srsName, srsDimension:srsDimension} = params;
 	return `<gml:LineString${attrs({srsName, 'gml:id':gmlId})}>` +
@@ -57,6 +88,15 @@ var converter = {
 	          '</gml:posList>' +
 	       '</gml:LineString>';
     },
+     /**
+     * Converts an input geojson LinearRing member of a polygon geometry to gml
+     * @param {number[][]} coords the coordinates member of the geojson geometry
+     * @param {string|number} gmlId the gml:id
+     * @param {Object} params optional parameters
+     * @param {string|undefined} params.srsName as string specifying SRS
+     * @param {number|string|undefined} params.srsDimension the dimensionality of each coordinate, i.e. 2 or 3.
+     * @returns {string} a string containing gml representing the input geometry
+     */
     'LinearRing': function(coords, gmlId, params={}){
 	var {srsName:srsName, srsDimension:srsDimension} = params;
 	return `<gml:LinearRing${attrs({'gml:id':gmlId, srsName})}>` +
@@ -65,6 +105,15 @@ var converter = {
 	          '</gml:posList>' + 
 	       '</gml:LinearRing>';
     },
+     /**
+     * Converts an input geojson Polygon geometry to gml
+     * @param {number[][][]} coords the coordinates member of the geojson geometry
+     * @param {string|number} gmlId the gml:id
+     * @param {Object} params optional parameters
+     * @param {string|undefined} params.srsName as string specifying SRS
+     * @param {number|string|undefined} params.srsDimension the dimensionality of each coordinate, i.e. 2 or 3.
+     * @returns {string} a string containing gml representing the input geometry
+     */
     'Polygon': function(coords, gmlId, params={}){
 	// geom.coordinates are arrays of LinearRings
 	var {srsName:srsName, srsDimension:srsDimension} = params;
@@ -82,33 +131,75 @@ var converter = {
 	polygon += '</gml:Polygon>';
 	return polygon;
     },
-    
+     /**
+     * Converts an input geojson MultiPoint geometry to gml
+     * @param {number[][]} coords the coordinates member of the geojson geometry
+     * @param {string|number} gmlId the gml:id
+     * @param {Object} params optional parameters
+     * @param {string|undefined} params.srsName as string specifying SRS
+     * @param {number|string|undefined} params.srsDimension the dimensionality of each coordinate, i.e. 2 or 3.
+     * @returns {string} a string containing gml representing the input geometry
+     */
     'MultiPoint': function(coords, gmlId, params={}){
 	return this._multi('MultiPoint', 'pointMember', coords, gmlId, params);
     },
+     /**
+     * Converts an input geojson MultiLineString geometry to gml
+     * @param {number[][][]} coords the coordinates member of the geojson geometry
+     * @param {string|number} gmlId the gml:id
+     * @param {Object} params optional parameters
+     * @param {string|undefined} params.srsName as string specifying SRS
+     * @param {number|string|undefined} params.srsDimension the dimensionality of each coordinate, i.e. 2 or 3.
+     * @returns {string} a string containing gml representing the input geometry
+     */
     'MultiLineString': function(coords, gmlId, params={}){
 	return this._multi('MultiCurve', 'curveMember', coords, gmlId, params);
     },
+     /**
+     * Converts an input geojson MultiPolygon geometry to gml
+     * @param {number[][][][]} coords the coordinates member of the geojson geometry
+     * @param {string|number} gmlId the gml:id
+     * @param {Object} params optional parameters
+     * @param {string|undefined} params.srsName as string specifying SRS
+     * @param {number|string|undefined} params.srsDimension the dimensionality of each coordinate, i.e. 2 or 3.
+     * @returns {string} a string containing gml representing the input geometry
+     */
     'MultiPolygon': function(coords, gmlId, params={}){
 	return this._multi('MultiSurface', 'surfaceMember',
 			   coords, gmlId, params);
     },
+     /**
+     * Converts an input geojson GeometryCollection geometry to gml
+     * @param {Object[]} coords the coordinates member of the geojson geometry
+     * @param {string|number} gmlId the gml:id
+     * @param {Object} params optional parameters
+     * @param {string|undefined} params.srsName as string specifying SRS
+     * @param {number|string|undefined} params.srsDimension the dimensionality of each coordinate, i.e. 2 or 3.
+     * @returns {string} a string containing gml representing the input geometry
+     */
     'GeometryCollection': function(geoms, gmlId, params={}){
 	return this._multi('MultiGeometry', 'geometryMember',
 			   geoms, gmlId, params);
     }
 };
 
-function geomToGml(geom,
-		   gmlId,
-		   srsName='http://www.opengis.net/def/crs/EPSG/0/4326',
-		   srsDimension,
-		   gmlIds=[]){
-    return converter[geom.type](geom.coordinates || geom.geometries,
-				gmlId,
-				srsName,
-				srsDimension,
-				gmlIds
-			       ); 
+/**
+ * Translates any geojson geometry into GML 3.2.1
+ * @param {Object} geom a geojson geometry object
+ * @param {Array|undefined} geom.coordinates the nested array of coordinates forming the geometry
+ * @param {Object[]|undefined} geom.geometries for a GeometryCollection only, the array of member geometry objects
+ * @param {string|number} gmlId the gml:id of the geometry
+ * @param {object} params optional parameters
+ * @param {string|undefined} params.srsName a string specifying the SRS
+ * @param {string|undefined} params.srsDimension the dimensionality of each coordinate, i.e. 2 or 3.
+ * @param {number[]|string[]|undefined} gmlIds  an array of number/string gml:ids of the member geometries of a multigeometry.
+ * @returns {string} a valid gml string describing the input geojson geometry
+ */
+function geomToGml(geom, gmlId, params){
+    return converter[geom.type](
+	geom.coordinates || geom.geometries,
+	gmlId,
+	params
+    ); 
 }
 exports.geomToGml = geomToGml;
