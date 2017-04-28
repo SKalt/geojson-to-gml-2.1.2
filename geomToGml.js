@@ -19,8 +19,10 @@ function capitalizeFirstLetter(str){
 function lowerFirstLetter(str){
     return str.replace(/^./, (letter)=>letter.toLowerCase());
 }
+/** @constant */
 var converter = {
-    /**
+    /** 
+     * @method 
      * converts a geojson geometry Point to gml
      * @param {number[]} coords the coordinates member of the geometry
      * @param {string|undefined} srsName a string specifying SRS
@@ -34,6 +36,7 @@ var converter = {
 	    '</gml:Point>';
     },
     /**
+     * @method 
      * converts a geojson geometry LineString to gml
      * @param {number[][]} coords the coordinates member of the geometry
      * @param {string|undefined} srsName a string specifying SRS
@@ -47,6 +50,7 @@ var converter = {
 	       '</gml:LineString>';
     },
     /**
+     * @method 
      * converts a geojson geometry ring in a polygon to gml
      * @param {number[][]} coords the coordinates member of the geometry
      * @param {string|undefined} srsName a string specifying SRS
@@ -60,6 +64,7 @@ var converter = {
 	       '</gml:LinearRing>';
     },
     /**
+     * @method 
      * converts a geojson geometry Point to gml
      * @param {number[][][]} coords the coordinates member of the geometry
      * @param {string|undefined} srsName a string specifying SRS
@@ -82,6 +87,7 @@ var converter = {
 	return polygon;
     },
     /**
+     * @method 
      * Handles multigeometries
      * @param {Object} geom a geojson geometry object
      * @param {string} name the name of the multigeometry, e.g. 'MultiPolygon'
