@@ -13,9 +13,6 @@ function attrs(attrMappings){
     return results;
 }
 
-const capital = (str) => str.replace(/^./, (letter) => letter.toUpperCase());
-const lower = (str) => str.replace(/^./, (letter) => letter.toLowerCase());
-
 var converter = {
     /**
      * A handler to compile geometries to multigeometries
@@ -67,7 +64,7 @@ var converter = {
 	var {srsName:srsName, srsDimension:srsDimension} = params;
 	return `<gml:Point${attrs({srsName:srsName, 'gml:id': gmlId})}>` +
 	         `<gml:pos${attrs({srsDimension})}>` +
-	               coords.join(' ') +
+	            coords.reverse().join(' ') +
 	          '</gml:pos>' +
 	        '</gml:Point>';
     },
@@ -84,7 +81,7 @@ var converter = {
 	var {srsName:srsName, srsDimension:srsDimension} = params;
 	return `<gml:LineString${attrs({srsName, 'gml:id':gmlId})}>` +
 	    `<gml:posList${attrs({srsDimension})}>` +
-	              coords.map((e)=>e.join(' ')).join(' ') + 
+	            coords.map((e)=>e.reverse().join(' ')).join(' ') + 
 	          '</gml:posList>' +
 	       '</gml:LineString>';
     },
@@ -101,7 +98,7 @@ var converter = {
 	var {srsName:srsName, srsDimension:srsDimension} = params;
 	return `<gml:LinearRing${attrs({'gml:id':gmlId, srsName})}>` +
 	          `<gml:posList${attrs({srsDimension})}>` +
-	             coords.map((e)=>e.join(' ')).join(' ') + 
+	            coords.map((e)=>e.reverse().join(' ')).join(' ') + 
 	          '</gml:posList>' + 
 	       '</gml:LinearRing>';
     },
