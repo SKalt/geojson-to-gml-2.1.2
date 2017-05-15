@@ -1,11 +1,11 @@
 {
   "name": "geojson_to_gml",
   "version": "1.0.0",
-  "description": "a package to translate geojson to gml",
+  "description": "a package to translate geojson to gml 2.1.2",
   "main": "geomToGml.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/SKalt/geojson-to-gml.git"
+    "url": "https://github.com/SKalt/geojson-to-gml-2.1.2.git"
   },
   "scripts": {
     "test": "mocha --timeout 30000"
