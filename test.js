@@ -2,7 +2,8 @@
 var gml2 = require('./geomToGml.js').geomToGml;
 var gml3 = require('./geomToGml3.js').geomToGml;
 var assert = require('assert');
-var validate = require('../wfs_validator/validator.js').validate;
+var validate = require('xsd-schema-validator').validateXML;
+//var validate = require('../wfs_validator/validator.js').validate;
 
 function addNs(xml){
     var xmlns = ` xmlns:gml="http://www.opengis.net/gml"`;
@@ -82,6 +83,18 @@ var geometrycollection = {
     ]
 };
 
+function validateGml(xml, xsd){
+    return new Promise(function(resolve, reject){
+	validate(xml, xsd, function(err, result){
+	    if (err) reject(err);
+	    resolve(result);
+	});
+    });
+}
+
+const validateGml2 = (xml) => validateGml(xml, './validation/2.1.2/gml.xsd');
+const validateGml3 = (xml) => validateGml(xml, './validation/3.2.1/gml.xsd');
+
 describe('geomToGml-2.1.2', function(){
     describe('visual inspection', function(){
 	it('should look right, or at least visible', function(){
@@ -94,31 +107,31 @@ describe('geomToGml-2.1.2', function(){
     describe('validation tests', function(){
 	it('Point', function(){
 	    var xml = addNs(gml2(point));
-	    return validate(xml, 'gml', '2.1.2');
+	    return validateGml2(xml);
 	});
 	it('LineString', function(){
 	    var xml = addNs(gml2(line));
-	    return validate(xml, 'gml', '2.1.2');
+	    return validateGml2(xml);
 	});
 	it('Polygon', function(){
 	    var xml = addNs(gml2(polygon));
-	    return validate(xml, 'gml', '2.1.2');
+	    return validateGml2(xml);
 	});
 	it('MultiPoint', function(){
 	    var xml = addNs(gml2(multipoint));
-	    return validate(xml, 'gml', '2.1.2');
+	    return validateGml2(xml);
 	});
 	it('MultiPolygon', function(){
 	    var xml = addNs(gml2(multipolygon));
-	    return validate(xml, 'gml', '2.1.2');
+	    return validateGml2(xml);
 	});
 	it('MultiLineString', function(){
 	    var xml = addNs(gml2(multilinestring));
-	    return validate(xml, 'gml', '2.1.2');
+	    return validateGml2(xml);
 	});
 	it('GeometryCollection', function(){
 	    var xml = addNs(gml2(geometrycollection));
-	    return validate(xml, 'gml', '2.1.2');
+	    return validateGml2(xml);
 	});
 	
     });
@@ -142,31 +155,31 @@ describe('geomToGml-3.2.1', function(){
     describe('validation tests', function(){
 	it('Point', function(){
 	    var xml = addNs3(gml3(point, 'ab.1'));
-	    return validate(xml, 'gml', '3.2.1');
+	    return validateGml3(xml);
 	});
 	it('LineString', function(){
 	    var xml = addNs3(gml3(line, 'ab.1'));
-	    return validate(xml, 'gml', '3.2.1');
+	    return validateGml3(xml);
 	});
 	it('Polygon', function(){
 	    var xml = addNs3(gml3(polygon, 'ab.1'));
-	    return validate(xml, 'gml', '3.2.1');
+	    return validateGml3(xml);
 	});
 	it('MultiPoint', function(){
 	    var xml = addNs3(gml3(multipoint,'ab.0', {gmlIds:['ab.1', 'cd.2']}));
-	    return validate(xml, 'gml', '3.2.1');
+	    return validateGml3(xml);
 	});
 	it('MultiLineString', function(){
 	    var xml = addNs3(gml3(multilinestring,'ab.0', {gmlIds:['ab.1', 'cd.2']}));
-	    return validate(xml, 'gml', '3.2.1');
+	    return validateGml3(xml);
 	});
 	it('MultiPolygon', function(){
 	    var xml = addNs3(gml3(multipolygon,'ab.0', {gmlIds:['ab.1', 'cd.2']}));
-	    return validate(xml, 'gml', '3.2.1');
+	    return validateGml3(xml);
 	});
 	it('GeometryCollecion', function(){
 	    var xml = addNs3(gml3(geometrycollection, 'ab.0', {gmlIds:['ab.1', 'cd.2']}));
-	    return validate(xml, 'gml', '3.2.1');
+	    return validateGml3(xml);
 	});
     });
 });
