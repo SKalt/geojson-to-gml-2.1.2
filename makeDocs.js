@@ -2,7 +2,7 @@ const fs = require('fs');
 const jsdoc2md = require('jsdoc-to-markdown');
 
 var readme = fs.readFileSync('.readme.md', 'utf8');
-jsdoc2md.render({ files: ['geomToGml-2.1.2.js', 'geomToGml-3.2.1.js'] }).then(
+jsdoc2md.render({ files: ['geomToGml-2.1.2.js'] }).then(
     function(result){
 	readme += '\n' + result;
 	fs.writeFileSync('README.md', readme);
