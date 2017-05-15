@@ -13,9 +13,24 @@ function attrs(attrMappings){
     return results;
 }
 
+/**
+ * checks outer scope for gmlId argument/variable
+ * @function 
+ */
+function enforceGmlId(){
+    if (!gmlId){
+	console.warn('No gmlId supplied');
+    }
+};
+
+/** @const 
+ * @desc a namespace to switch between geojson-handling functions by geojson.type
+ */
 var converter = {
     /**
      * A handler to compile geometries to multigeometries
+     * @method 
+     * @memeberof converter~
      * @param {string} name the name of the target multigeometry
      * @param {string} memberName the gml:tag of each multigeometry member.
      * @param {Object[]|Array} geom an array of geojson geometries
@@ -53,6 +68,8 @@ var converter = {
     },
     /**
      * Converts an input geojson Point geometry to gml
+     * @method 
+     * @memberof converter~
      * @param {number[]} coords the coordinates member of the geojson geometry
      * @param {string|number} gmlId the gml:id
      * @param {Object} params optional parameters
@@ -68,8 +85,10 @@ var converter = {
 	          '</gml:pos>' +
 	        '</gml:Point>';
     },
-     /**
+    /**
      * Converts an input geojson LineString geometry to gml
+     * @method 
+     * @memberof converter~
      * @param {number[][]} coords the coordinates member of the geojson geometry
      * @param {string|number} gmlId the gml:id
      * @param {Object} params optional parameters
@@ -85,8 +104,10 @@ var converter = {
 	          '</gml:posList>' +
 	       '</gml:LineString>';
     },
-     /**
+    /**
      * Converts an input geojson LinearRing member of a polygon geometry to gml
+     * @method 
+     * @memberof converter~
      * @param {number[][]} coords the coordinates member of the geojson geometry
      * @param {string|number} gmlId the gml:id
      * @param {Object} params optional parameters
@@ -102,8 +123,10 @@ var converter = {
 	          '</gml:posList>' + 
 	       '</gml:LinearRing>';
     },
-     /**
+    /**
      * Converts an input geojson Polygon geometry to gml
+     * @method 
+     * @memberof converter~
      * @param {number[][][]} coords the coordinates member of the geojson geometry
      * @param {string|number} gmlId the gml:id
      * @param {Object} params optional parameters
@@ -128,8 +151,10 @@ var converter = {
 	polygon += '</gml:Polygon>';
 	return polygon;
     },
-     /**
+    /**
      * Converts an input geojson MultiPoint geometry to gml
+     * @method 
+     * @memberof converter~
      * @param {number[][]} coords the coordinates member of the geojson geometry
      * @param {string|number} gmlId the gml:id
      * @param {Object} params optional parameters
@@ -140,8 +165,10 @@ var converter = {
     'MultiPoint': function(coords, gmlId, params={}){
 	return this._multi('MultiPoint', 'pointMember', coords, gmlId, params);
     },
-     /**
+    /**
      * Converts an input geojson MultiLineString geometry to gml
+     * @method 
+     * @memberof converter~
      * @param {number[][][]} coords the coordinates member of the geojson geometry
      * @param {string|number} gmlId the gml:id
      * @param {Object} params optional parameters
@@ -152,8 +179,10 @@ var converter = {
     'MultiLineString': function(coords, gmlId, params={}){
 	return this._multi('MultiCurve', 'curveMember', coords, gmlId, params);
     },
-     /**
+    /**
      * Converts an input geojson MultiPolygon geometry to gml
+     * @method 
+     * @memberof converter~
      * @param {number[][][][]} coords the coordinates member of the geojson geometry
      * @param {string|number} gmlId the gml:id
      * @param {Object} params optional parameters
@@ -165,8 +194,10 @@ var converter = {
 	return this._multi('MultiSurface', 'surfaceMember',
 			   coords, gmlId, params);
     },
-     /**
+    /**
      * Converts an input geojson GeometryCollection geometry to gml
+     * @method 
+     * @memberof converter~
      * @param {Object[]} coords the coordinates member of the geojson geometry
      * @param {string|number} gmlId the gml:id
      * @param {Object} params optional parameters
@@ -182,6 +213,8 @@ var converter = {
 
 /**
  * Translates any geojson geometry into GML 3.2.1
+ * @public 
+ * @function 
  * @param {Object} geom a geojson geometry object
  * @param {Array|undefined} geom.coordinates the nested array of coordinates forming the geometry
  * @param {Object[]|undefined} geom.geometries for a GeometryCollection only, the array of member geometry objects
