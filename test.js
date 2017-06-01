@@ -95,7 +95,7 @@ describe('geomToGml-2.1.2', function(){
 	it('should look right, or at least visible', function(){
 	    [point, line, polygon, multipoint,
 	     multilinestring, multipolygon, geometrycollection].map(
-		 (e)=>console.log(addNs(gml2(e)), '\n------------------------\n')
+		 (e)=>console.log(addNs(gml(e)), '\n------------------------\n')
 	     );
 	});
     });
