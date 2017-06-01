@@ -1,7 +1,5 @@
-/* DISCLAIMER: gml 2.1.2-compliant only
-This hack only supports GML simple features.
+/* Convert geojson into gml 2.1.2 simple features.
 GML models from https://docs.oracle.com/cd/E11882_01/appdev.112/e11829/oracle/spatial/util/GML.html
-
  */
 /**
  * returns a string with the first letter capitalized.
