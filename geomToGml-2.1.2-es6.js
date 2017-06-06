@@ -181,7 +181,7 @@ function geomToGml(geom, srsName='EPSG:4326'){
   return converter[geom.type](geom.coordinates || geom.geometries, srsName);
 }
 /** exports a function to convert geojson geometries to gml 2.1.2 */
-module.exports = {
+export {
   geomToGml, Point, LineString, LinearRing, Polygon,
   MultiPoint, MultiLineString, MultiPolygon, GeometryCollection
 };

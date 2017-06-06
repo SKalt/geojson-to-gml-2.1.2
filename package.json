@@ -3,12 +3,14 @@
   "version": "1.1.0",
   "description": "a package to translate geojson to gml 2.1.2",
   "main": "geomToGml-2.1.2.js",
+  "module": "geomToGml-2.1.2-es6.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/SKalt/geojson-to-gml-2.1.2.git"
   },
   "scripts": {
-    "test": "mocha --timeout 30000"
+    "test": "mocha --timeout 30000",
+    "make-docs": "node makeDocs.js"
   },
   "keywords": [
     "geojson",
