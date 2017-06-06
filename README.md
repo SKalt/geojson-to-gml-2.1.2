@@ -14,57 +14,47 @@ OGC and OpenGIS are registered trademarks of Open Geospatial Consortium.
 
 Copyright (c) 2012 Open Geospatial Consortium
 
-## Members
-
-<dl>
-<dt><a href="#geomToGml">geomToGml</a></dt>
-<dd><p>exports a function to convert geojson geometries to gml 2.1.2</p>
-</dd>
-</dl>
-
-## Constants
-
-<dl>
-<dt><a href="#converter">converter</a></dt>
-<dd></dd>
-</dl>
-
 ## Functions
 
 <dl>
+<dt><a href="#Point">Point(coords, srsName)</a> ⇒ <code>string</code></dt>
+<dd><p>converts a geojson geometry Point to gml</p>
+</dd>
+<dt><a href="#LineString">LineString(coords, srsName)</a> ⇒ <code>string</code></dt>
+<dd><p>converts a geojson geometry LineString to gml</p>
+</dd>
+<dt><a href="#LinearRing">LinearRing(coords, srsName)</a> ⇒ <code>string</code></dt>
+<dd><p>converts a geojson geometry ring in a polygon to gml</p>
+</dd>
+<dt><a href="#Polygon">Polygon(coords, srsName)</a> ⇒ <code>string</code></dt>
+<dd><p>converts a geojson geometry Polygon to gml</p>
+</dd>
+<dt><a href="#_multi">_multi(geom, name, srsName, memberPrefix)</a> ⇒ <code>string</code></dt>
+<dd><p>Handles multigeometries or geometry collections</p>
+</dd>
+<dt><a href="#MultiPoint">MultiPoint(coords, srsName)</a> ⇒ <code>string</code></dt>
+<dd><p>converts a geojson geometry MultiPoint to gml</p>
+</dd>
+<dt><a href="#MultiLineString">MultiLineString(coords, srsName)</a> ⇒ <code>string</code></dt>
+<dd><p>converts a geojson geometry MultiLineString to gml</p>
+</dd>
+<dt><a href="#MultiPolygon">MultiPolygon(coords, srsName)</a> ⇒ <code>string</code></dt>
+<dd><p>converts a geojson geometry MultiPolygon to gml</p>
+</dd>
+<dt><a href="#GeometryCollection">GeometryCollection(geoms, srsName)</a> ⇒ <code>string</code></dt>
+<dd><p>converts a geojson geometry GeometryCollection to gml MultiGeometry</p>
+</dd>
 <dt><a href="#geomToGml">geomToGml(geom, srsName)</a> ⇒ <code>string</code></dt>
 <dd><p>Translate geojson to gml 2.1.2 for any geojson geometry type</p>
 </dd>
 </dl>
 
-<a name="geomToGml"></a>
+<a name="Point"></a>
 
-## geomToGml
-exports a function to convert geojson geometries to gml 2.1.2
-
-**Kind**: global variable  
-<a name="converter"></a>
-
-## converter
-**Kind**: global constant  
-
-* [converter](#converter)
-    * [~Point(coords, srsName)](#converter..Point) ⇒ <code>string</code>
-    * [~LineString(coords, srsName)](#converter..LineString) ⇒ <code>string</code>
-    * [~LinearRing(coords, srsName)](#converter..LinearRing) ⇒ <code>string</code>
-    * [~Polygon(coords, srsName)](#converter..Polygon) ⇒ <code>string</code>
-    * [~_multi(geom, name, srsName, memberPrefix)](#converter.._multi) ⇒ <code>string</code>
-    * [~MultiPoint(coords, srsName)](#converter..MultiPoint) ⇒ <code>string</code>
-    * [~MultiLineString(coords, srsName)](#converter..MultiLineString) ⇒ <code>string</code>
-    * [~MultiPolygon(coords, srsName)](#converter..MultiPolygon) ⇒ <code>string</code>
-    * [~GeometryCollection(geoms, srsName)](#converter..GeometryCollection) ⇒ <code>string</code>
-
-<a name="converter..Point"></a>
-
-### converter~Point(coords, srsName) ⇒ <code>string</code>
+## Point(coords, srsName) ⇒ <code>string</code>
 converts a geojson geometry Point to gml
 
-**Kind**: inner method of [<code>converter</code>](#converter)  
+**Kind**: global function  
 **Returns**: <code>string</code> - a string of gml describing the input geometry  
 
 | Param | Type | Description |
@@ -72,12 +62,12 @@ converts a geojson geometry Point to gml
 | coords | <code>Array.&lt;number&gt;</code> | the coordinates member of the geometry |
 | srsName | <code>string</code> \| <code>undefined</code> | a string specifying SRS |
 
-<a name="converter..LineString"></a>
+<a name="LineString"></a>
 
-### converter~LineString(coords, srsName) ⇒ <code>string</code>
+## LineString(coords, srsName) ⇒ <code>string</code>
 converts a geojson geometry LineString to gml
 
-**Kind**: inner method of [<code>converter</code>](#converter)  
+**Kind**: global function  
 **Returns**: <code>string</code> - a string of gml describing the input geometry  
 
 | Param | Type | Description |
@@ -85,12 +75,12 @@ converts a geojson geometry LineString to gml
 | coords | <code>Array.&lt;Array.&lt;number&gt;&gt;</code> | the coordinates member of the geometry |
 | srsName | <code>string</code> \| <code>undefined</code> | a string specifying SRS |
 
-<a name="converter..LinearRing"></a>
+<a name="LinearRing"></a>
 
-### converter~LinearRing(coords, srsName) ⇒ <code>string</code>
+## LinearRing(coords, srsName) ⇒ <code>string</code>
 converts a geojson geometry ring in a polygon to gml
 
-**Kind**: inner method of [<code>converter</code>](#converter)  
+**Kind**: global function  
 **Returns**: <code>string</code> - a string of gml describing the input geometry  
 
 | Param | Type | Description |
@@ -98,12 +88,12 @@ converts a geojson geometry ring in a polygon to gml
 | coords | <code>Array.&lt;Array.&lt;number&gt;&gt;</code> | the coordinates member of the geometry |
 | srsName | <code>string</code> \| <code>undefined</code> | a string specifying SRS |
 
-<a name="converter..Polygon"></a>
+<a name="Polygon"></a>
 
-### converter~Polygon(coords, srsName) ⇒ <code>string</code>
+## Polygon(coords, srsName) ⇒ <code>string</code>
 converts a geojson geometry Polygon to gml
 
-**Kind**: inner method of [<code>converter</code>](#converter)  
+**Kind**: global function  
 **Returns**: <code>string</code> - a string of gml describing the input geometry  
 
 | Param | Type | Description |
@@ -111,12 +101,12 @@ converts a geojson geometry Polygon to gml
 | coords | <code>Array.&lt;Array.&lt;Array.&lt;number&gt;&gt;&gt;</code> | the coordinates member of the geometry |
 | srsName | <code>string</code> \| <code>undefined</code> | a string specifying SRS |
 
-<a name="converter.._multi"></a>
+<a name="_multi"></a>
 
-### converter~_multi(geom, name, srsName, memberPrefix) ⇒ <code>string</code>
+## _multi(geom, name, srsName, memberPrefix) ⇒ <code>string</code>
 Handles multigeometries or geometry collections
 
-**Kind**: inner method of [<code>converter</code>](#converter)  
+**Kind**: global function  
 **Returns**: <code>string</code> - a string of gml describing the input multigeometry  
 **Throws**:
 
@@ -130,12 +120,12 @@ Handles multigeometries or geometry collections
 | srsName | <code>string</code> \| <code>undefined</code> | a string specifying the SRS |
 | memberPrefix | <code>string</code> | the prefix of a gml member tag |
 
-<a name="converter..MultiPoint"></a>
+<a name="MultiPoint"></a>
 
-### converter~MultiPoint(coords, srsName) ⇒ <code>string</code>
+## MultiPoint(coords, srsName) ⇒ <code>string</code>
 converts a geojson geometry MultiPoint to gml
 
-**Kind**: inner method of [<code>converter</code>](#converter)  
+**Kind**: global function  
 **Returns**: <code>string</code> - a string of gml describing the input geometry  
 **See**
 
@@ -148,12 +138,12 @@ converts a geojson geometry MultiPoint to gml
 | coords | <code>Array.&lt;Array.&lt;number&gt;&gt;</code> | the coordinates member of the geometry |
 | srsName | <code>string</code> \| <code>undefined</code> | a string specifying SRS |
 
-<a name="converter..MultiLineString"></a>
+<a name="MultiLineString"></a>
 
-### converter~MultiLineString(coords, srsName) ⇒ <code>string</code>
+## MultiLineString(coords, srsName) ⇒ <code>string</code>
 converts a geojson geometry MultiLineString to gml
 
-**Kind**: inner method of [<code>converter</code>](#converter)  
+**Kind**: global function  
 **Returns**: <code>string</code> - a string of gml describing the input geometry  
 **See**
 
@@ -166,12 +156,12 @@ converts a geojson geometry MultiLineString to gml
 | coords | <code>Array.&lt;Array.&lt;Array.&lt;number&gt;&gt;&gt;</code> | the coordinates member of the geometry |
 | srsName | <code>string</code> \| <code>undefined</code> | a string specifying SRS |
 
-<a name="converter..MultiPolygon"></a>
+<a name="MultiPolygon"></a>
 
-### converter~MultiPolygon(coords, srsName) ⇒ <code>string</code>
+## MultiPolygon(coords, srsName) ⇒ <code>string</code>
 converts a geojson geometry MultiPolygon to gml
 
-**Kind**: inner method of [<code>converter</code>](#converter)  
+**Kind**: global function  
 **Returns**: <code>string</code> - a string of gml describing the input geometry  
 **See**
 
@@ -184,12 +174,12 @@ converts a geojson geometry MultiPolygon to gml
 | coords | <code>Array.&lt;Array.&lt;Array.&lt;Array.&lt;number&gt;&gt;&gt;&gt;</code> | the coordinates member of the geometry |
 | srsName | <code>string</code> \| <code>undefined</code> | a string specifying SRS |
 
-<a name="converter..GeometryCollection"></a>
+<a name="GeometryCollection"></a>
 
-### converter~GeometryCollection(geoms, srsName) ⇒ <code>string</code>
+## GeometryCollection(geoms, srsName) ⇒ <code>string</code>
 converts a geojson geometry GeometryCollection to gml MultiGeometry
 
-**Kind**: inner method of [<code>converter</code>](#converter)  
+**Kind**: global function  
 **Returns**: <code>string</code> - a string of gml describing the input GeometryCollection  
 **See**: _multi  
 
