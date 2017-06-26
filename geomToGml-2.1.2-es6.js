@@ -9,7 +9,7 @@
  * @returns {string} a string with the first letter capitalized.
  */
 function capitalizeFirstLetter(str){
-  return str.replace(/^./, (letter)=>letter.toUpperCase());
+  return str.replace(/^./, (letter) => letter.toUpperCase());
 }
 /**
  * returns a string with the first letter lowered.
@@ -98,7 +98,6 @@ function Polygon(coords, srsName){
  */
 function _multi(geom, name, cb, srsName, memberPrefix=''){
   let multi = `<gml:${name}${(srsName ? ` srsName="${srsName}"` : '')}>`;
-  let isAMultiGeometry = geom.type === 'MutliGeometry';
   for (let member of geom){
     var _memberPrefix = '';
     if (member.type){
@@ -111,9 +110,8 @@ function _multi(geom, name, cb, srsName, memberPrefix=''){
     } else {
       _memberPrefix = capitalizeFirstLetter(memberPrefix);
     }
-    multi += `<gml:${memberPrefix}Member>` +
-      (isAMultiGeometry ? cb[_memberPrefix] : cb)(member, srsName='') +
-      `</gml:${memberPrefix}Member>`;
+    let inner = (cb[_memberPrefix] || cb)(member, srsName='');
+    multi += `<gml:${memberPrefix}Member>${inner}</gml:${memberPrefix}Member>`;
   }
   multi += `</gml:${name}>`;
   return multi;
@@ -158,6 +156,7 @@ const converter = {
   Point, LineString, LinearRing, Polygon,
   MultiPoint, MultiLineString, MultiPolygon, GeometryCollection
 };
+
 /**
  * converts a geojson geometry GeometryCollection to gml MultiGeometry
  * @function 
@@ -167,8 +166,8 @@ const converter = {
  * @see _multi
  */
 function GeometryCollection(geoms, srsName){
-  return _multi(geoms, 'MultiGeometry', ()=>"", srsName, 'geometry');
-};
+  return _multi(geoms, 'MultiGeometry', converter, srsName, 'geometry');
+}
 
 /**
  * Translate geojson to gml 2.1.2 for any geojson geometry type

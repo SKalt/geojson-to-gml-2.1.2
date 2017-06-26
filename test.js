@@ -1,5 +1,5 @@
 // from http://geojson.org/geojson-spec.html#examples
-var gml = require('./geomToGml-2.1.2.js').geomToGml;
+var gml = require('./geomToGml-2.1.2-cjs.js').geomToGml;
 var assert = require('assert');
 var validate = require('xsd-schema-validator').validateXML;
 

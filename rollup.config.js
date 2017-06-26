@@ -7,27 +7,23 @@ import uglify from 'rollup-plugin-uglify';
 
 export default {
   entry: 'geomToGml-2.1.2-es6.js',
-  dest: 'geomToGml-2.1.2.min.js',
-  format: 'iife',
+  dest: 'geomToGml-2.1.2-cjs.js',
+  format: 'cjs',
   sourceMap: 'inline',
   plugins: [
     resolve({
       jsnext: true,
       main: true,
-      browser: true,
+      browser: true
     }),
     commonjs(),
-    eslint({
-      exclude: [
-        'src/styles/**',
-      ]
-    }),
+    eslint({ }),
     babel({
-      exclude: 'node_modules/**',
+      exclude: 'node_modules/**'
     }),
     replace({
-      ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+      ENV: JSON.stringify(process.env.NODE_ENV || 'development')
     }),
     (process.env.NODE_ENV === 'production' && uglify()),
-  ],
+  ]
 };
