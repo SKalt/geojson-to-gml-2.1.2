@@ -1,8 +1,4 @@
 {
-  "envs":{    
-    "browser": true,
-    "es6": true
-  },
   "globals": {
     "console":true
   },
@@ -29,4 +25,3 @@
     ]
   }
 }
-

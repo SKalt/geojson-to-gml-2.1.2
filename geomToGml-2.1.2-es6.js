@@ -3,8 +3,8 @@
  */
 /**
  * returns a string with the first letter capitalized.
- * @function 
- * @private 
+ * @function
+ * @private
  * @param {string} str
  * @returns {string} a string with the first letter capitalized.
  */
@@ -13,17 +13,38 @@ function capitalizeFirstLetter(str){
 }
 /**
  * returns a string with the first letter lowered.
- * @function 
- * @private 
+ * @function
+ * @private
  * @param {string} str
  * @returns {string} a string with the first letter lowered.
  */
 function lowerFirstLetter(str){
   return str.replace(/^./, (letter)=>letter.toLowerCase());
 }
-/** 
+var coordinateOrder = true;
+/**
+ * geojson coordinates are in longitude/easting, latitude/northing [,elevation]
+ * order by [RFC-7946 § 3.1.1]{@link https://tools.ietf.org/html/rfc7946#section-3.1.1}.
+ * however, you may use a CRS that follows a latitude/easting,
+ * longitude/northing, [,elevation] order.
+ * @function
+ * @param {boolean} order the order: true sets lng,lat order, false sets lat,lng.
+ * @returns undefined
+ */
+const setCoordinateOrder = (order) => coordinateOrder = order;
+function orderCoords(coords){
+  if (coordinateOrder){
+    return coords;
+  }
+  if (coords[2]){
+    return [coords[1], coords[0], coords[2]];
+  }
+  return coords.reverse();
+}
+
+/**
  * converts a geojson geometry Point to gml
- * @function 
+ * @function
  * @param {number[]} coords the coordinates member of the geometry
  * @param {string|undefined} srsName a string specifying SRS
  * @returns {string} a string of gml describing the input geometry
@@ -31,13 +52,13 @@ function lowerFirstLetter(str){
 function Point(coords, srsName){
   return `<gml:Point${(srsName ? ` srsName="${srsName}"` : '')}>` +
     '<gml:coordinates cs="," ts=" " decimal=".">' +
-    coords.join() +
+    orderCoords(coords).join() +
     '</gml:coordinates>' +
     '</gml:Point>';
 }
 /**
  * converts a geojson geometry LineString to gml
- * @function 
+ * @function
  * @param {number[][]} coords the coordinates member of the geometry
  * @param {string|undefined} srsName a string specifying SRS
  * @returns {string} a string of gml describing the input geometry
@@ -45,13 +66,13 @@ function Point(coords, srsName){
 function LineString(coords, srsName){
   return `<gml:LineString${(srsName ? ` srsName="${srsName}"`:'')}>` +
     '<gml:coordinates cs="," ts=" " decimal=".">' +
-    coords.join(' ') +
+    coords.map((e)=>orderCoords(e).join(' ')).join(' ') +
     '</gml:coordinates>' +
     '</gml:LineString>';
 }
 /**
  * converts a geojson geometry ring in a polygon to gml
- * @function 
+ * @function
  * @param {number[][]} coords the coordinates member of the geometry
  * @param {string|undefined} srsName a string specifying SRS
  * @returns {string} a string of gml describing the input geometry
@@ -59,13 +80,13 @@ function LineString(coords, srsName){
 function LinearRing(coords, srsName){
   return `<gml:LinearRing${(srsName ? ` srsName="${srsName}"`:'')}>` +
     '<gml:coordinates cs="," ts=" " decimal=".">' +
-    coords.join(' ') + 
+    coords.map((e)=>orderCoords(e).join(' ')).join(' ') +
     '</gml:coordinates>' +
     '</gml:LinearRing>';
 }
 /**
  * converts a geojson geometry Polygon to gml
- * @function 
+ * @function
  * @param {number[][][]} coords the coordinates member of the geometry
  * @param {string|undefined} srsName a string specifying SRS
  * @returns {string} a string of gml describing the input geometry
@@ -73,14 +94,14 @@ function LinearRing(coords, srsName){
 function Polygon(coords, srsName){
   // geom.coordinates are arrays of LinearRings
   let polygon = `<gml:Polygon${(srsName ? ` srsName="${srsName}"`:'')}>` +
-	'<gml:outerBoundaryIs>' +
-	LinearRing(coords[0]) +
-	'</gml:outerBoundaryIs>';
+    '<gml:outerBoundaryIs>' +
+    LinearRing(coords[0]) +
+    '</gml:outerBoundaryIs>';
   if (coords.length >= 2){
     for (let linearRing of coords.slice(1)){
       polygon += '<gml:innerBoundaryIs>' +
-	LinearRing(linearRing) + 
-	'</gml:innerBoundaryIs>';
+LinearRing(linearRing) +
+'</gml:innerBoundaryIs>';
     }
   }
   polygon += '</gml:Polygon>';
@@ -118,7 +139,7 @@ function _multi(geom, name, cb, srsName, memberPrefix=''){
 }
 /**
  * converts a geojson geometry MultiPoint to gml
- * @function 
+ * @function
  * @param {number[][]} coords the coordinates member of the geometry
  * @param {string|undefined} srsName a string specifying SRS
  * @returns {string} a string of gml describing the input geometry
@@ -130,7 +151,7 @@ function MultiPoint(coords, srsName){
 }
 /**
  * converts a geojson geometry MultiLineString to gml
- * @function 
+ * @function
  * @param {number[][][]} coords the coordinates member of the geometry
  * @param {string|undefined} srsName a string specifying SRS
  * @returns {string} a string of gml describing the input geometry
@@ -142,7 +163,7 @@ function MultiLineString(coords, srsName){
 }
 /**
  * converts a geojson geometry MultiPolygon to gml
- * @function 
+ * @function
  * @param {number[][][][]} coords the coordinates member of the geometry
  * @param {string|undefined} srsName a string specifying SRS
  * @returns {string} a string of gml describing the input geometry
@@ -159,7 +180,7 @@ const converter = {
 
 /**
  * converts a geojson geometry GeometryCollection to gml MultiGeometry
- * @function 
+ * @function
  * @param {Object[]} geoms an array of geojson geometry objects
  * @param {string|undefined} srsName a string specifying SRS
  * @returns {string} a string of gml describing the input GeometryCollection
@@ -171,7 +192,7 @@ function GeometryCollection(geoms, srsName){
 
 /**
  * Translate geojson to gml 2.1.2 for any geojson geometry type
- * @function 
+ * @function
  * @param {Object} geom a geojson geometry object
  * @param {string|undefined} srsName a string specifying SRS
  * @returns {string} a string of gml describing the input geometry
@@ -182,5 +203,6 @@ function geomToGml(geom, srsName='EPSG:4326'){
 /** exports a function to convert geojson geometries to gml 2.1.2 */
 export {
   geomToGml, Point, LineString, LinearRing, Polygon,
-  MultiPoint, MultiLineString, MultiPolygon, GeometryCollection
+  MultiPoint, MultiLineString, MultiPolygon, GeometryCollection,
+  setCoordinateOrder
 };
